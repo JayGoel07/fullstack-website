@@ -1,54 +1,22 @@
 const express= require('express');
 const router = express.Router();
-const Campground = require('../models/campground');
-const catchAsync = require('../utils/catchAsync');
-const {isLoggedin} = require('../middleware')
+const {isLoggedin} = require('../middleware');
+const campgrounds = require('../controllers/campgrounds');
+const multer  = require('multer');                         //multer is required to store 'files' (images)
+const {storage} = require('../cloudinary');
+const upload = multer({storage});         // now all image files get stored to cloudinary rather to terminal as thye are very large 
 
-router.get('/', async (req, res) => {      //view/campgrounds/index.ejs
-    const campgrounds = await Campground.find({});
-    res.render('campgrounds/index', { campgrounds })
-});
-router.get('/new', isLoggedin, (req, res) => {        //view/campgrounds/new.ejs
-    res.render('campgrounds/new');
-})
+router.route('/')
+    .get(campgrounds.index)
+    .post(isLoggedin, upload.array('image'),campgrounds.createcamp)
 
-router.post('/', isLoggedin, async(req, res) => {      //new ke liye (POST)
-    const campground = new Campground(req.body.campground);
-    await campground.save();
-    req.flash('success', 'Successfully made new');
-    res.redirect(`/campgrounds/${campground._id}`)
-})
+router.get('/new', isLoggedin, campgrounds.newform)
 
-router.get('/:id', async (req, res) => {    //view/campgrounds/show.ejs
-    const campground = await Campground.findById(req.params.id).populate('reviews');
-    if(!campground) {
-        req.flash('error', 'Cannot find that camprgound');
-        return res.redirect('/campgrounds');
-    }
-    res.render('campgrounds/show', { campground });
-});
+router.route('/:id')
+    .get(campgrounds.showcamp)
+    .put(isLoggedin, upload.array('image'), campgrounds.updatecamp)
+    .delete(isLoggedin, campgrounds.delcamp)
 
-router.get('/:id/edit',isLoggedin,  async (req, res) => {    //view/campgrounds/edit folder
-    const campground = await Campground.findById(req.params.id)
-    if (!campground) {
-        req.flash('error', 'Cannot find that campground!');
-        return res.redirect('/campgrounds');
-    }
-    res.render('campgrounds/edit', { campground });
-})
-
-router.put('/:id', async (req, res) => {      //view/campgrounds/edit folder
-    const { id } = req.params;
-    const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });   // ID, actual query to update 
-    req.flash('success', 'Successfully updated');
-    res.redirect(`/campgrounds/${campground._id}`)
-});
-
-router.delete('/:id',isLoggedin,  async (req, res) => {   //simply delete
-    const { id } = req.params;
-    await Campground.findByIdAndDelete(id);
-    req.flash('success', 'Successfully deleted campground');
-    res.redirect('/campgrounds');
-})
+router.get('/:id/edit', isLoggedin, campgrounds.editcamp)
 
 module.exports=router;

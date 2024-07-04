@@ -1,16 +1,23 @@
+if(process.env.NODE_ENV != "production") {
+    require('dotenv').config();
+}                                  //sab kuch cloudinary mai jaayega with the help of .env file 
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');  //edit ke liye 
 const ejsMate = require('ejs-mate');
-const campgroundRoutes= require('./routes/campgrounds');
-const reviewRoutes = require('./routes/reviews');
-const userRoutes = require('./routes/users')
+const mongoSanitize = require('express-mongo-sanitize');
 const session = require('express-session');
 const flash = require('connect-flash');
 const passport= require('passport');
 const passportlocal = require('passport-local');
+const helmet = require('helmet');
+
 const User=require('./models/user');
+const campgroundRoutes= require('./routes/campgrounds');
+const reviewRoutes = require('./routes/reviews');
+const userRoutes = require('./routes/users');
+
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp');
 const db = mongoose.connection;
@@ -27,7 +34,10 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.urlencoded({ extended: true }));   //new - POST ke liye chahiye 
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')))   //in boilerplates .. public/hello 
+app.use(mongoSanitize())   //for security issues 
+app.use(helmet({ contentSecurityPolicy : false}));
 const sessionconfig = {
+    name:'blah',  //nam of cokie
     secret:'thisissecret',resave:false, saveUninitialized:true, 
     cookie: {
         expires: Date.now()+1000*60*60*24*7,

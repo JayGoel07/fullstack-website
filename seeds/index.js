@@ -29,11 +29,13 @@ const seedDB = async () => {
     for (let i = 0; i < 50; i++) {
         const random1000 = Math.floor(Math.random() * 1000);  //1000 cities in cities array
         const price = Math.floor(Math.random() * 20)+10; 
-        const camp = new Campground({                   
+        const camp = new Campground({      
+            author : '6682534405458fee69d90152',   //koka ki hai               
             location: `${cities[random1000].city}, ${cities[random1000].state}`,
             title: `${sample(descriptors)} ${sample(places)}`,
-            //image: await seedImg(),
-            image : "https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg",
+            images: [
+              { url: "https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg", filename: "image1.jpg" },
+            ],            
             description :'Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit eveniet ullam voluptates earum dignissimos qui. Nostrum earum inventore nam delectus neque aut mollitia voluptatibus, fugit in praesentium laborum nesciunt magni.',
             price
         })
