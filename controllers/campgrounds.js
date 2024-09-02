@@ -1,6 +1,7 @@
 const { cloudinary } = require('../cloudinary');
 const Campground = require('../models/campground');
 
+// we can assume views directory for default 
 module.exports.index = async (req, res) => {      //view/campgrounds/index.ejs
     const campgrounds = await Campground.find({});
     res.render('campgrounds/index', { campgrounds })

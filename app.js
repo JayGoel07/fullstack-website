@@ -19,7 +19,20 @@ const reviewRoutes = require('./routes/reviews');
 const userRoutes = require('./routes/users');
 
 
-mongoose.connect('mongodb://localhost:27017/yelp-camp');
+const url = 'mongodb://localhost:27017/yelp-camp';
+
+async function main() {
+    try {
+        await mongoose.connect(url, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        console.log('Connected successfully to server');
+    } catch (error) {
+        console.error('Connection error:', error);
+    }
+}
+main();
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", () => {
@@ -70,7 +83,7 @@ app.use('/', userRoutes);
 app.use('/campgrounds', campgroundRoutes);    // /campgrounds already hoga router mai ab
 app.use('/campgrounds/:id/reviews', reviewRoutes);   
 
-app.get('/', (req, res) => {
+app.get('/', (req, res) => {     //Home page in views/home.ejs with its css file in public/stylesheets/home.css
     res.render('home')
 });
 
@@ -79,3 +92,6 @@ app.get('/', (req, res) => {
 app.listen(3000, () => {
     console.log('Serving on port 3000')
 })
+
+
+// node app.js to run the file in terminal 

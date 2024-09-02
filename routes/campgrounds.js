@@ -1,9 +1,11 @@
 const express= require('express');
-const router = express.Router();
+const router = express.Router();                   //Router helps to combine the things 
+
 const {isLoggedin} = require('../middleware');
-const campgrounds = require('../controllers/campgrounds');
-const multer  = require('multer');                         //multer is required to store 'files' (images)
 const {storage} = require('../cloudinary');
+const campgrounds = require('../controllers/campgrounds');
+
+const multer  = require('multer');                         //multer is required to store 'files' (images)
 const upload = multer({storage});         // now all image files get stored to cloudinary rather to terminal as thye are very large 
 
 router.route('/')

@@ -37,7 +37,7 @@ const seedDB = async () => {
               { url: "https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg", filename: "image1.jpg" },
             ],            
             description :'Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit eveniet ullam voluptates earum dignissimos qui. Nostrum earum inventore nam delectus neque aut mollitia voluptatibus, fugit in praesentium laborum nesciunt magni.',
-            price
+            source
         })
         await camp.save();
     }
