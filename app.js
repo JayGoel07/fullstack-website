@@ -19,7 +19,8 @@ const reviewRoutes = require('./routes/reviews');
 const userRoutes = require('./routes/users');
 
 
-const url = 'mongodb://localhost:27017/yelp-camp';
+const url = process.env.MONGODB_URI || 'mongodb://localhost:27017/yelp-camp';
+
 
 async function main() {
     try {
@@ -89,9 +90,11 @@ app.get('/', (req, res) => {     //Home page in views/home.ejs with its css file
 
 
 
-app.listen(3000, () => {
-    console.log('Serving on port 3000')
-})
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Serving on port ${PORT}`);
+});
+
 
 
 // node app.js to run the file in terminal 
