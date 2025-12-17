@@ -4,7 +4,10 @@ const axios = require('axios');
 const { places, descriptors } = require('./seedHelpers');   
 const Campground = require('../models/campground');    //2 dot hai so that directory select kr ske
 
-mongoose.connect('mongodb://localhost:27017/yelp-camp');
+require('dotenv').config();
+const url = process.env.MONGODB_URI || 'mongodb://localhost:27017/yelp-camp';
+
+mongoose.connect(url);
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", () => {

@@ -24,10 +24,7 @@ const url = process.env.MONGODB_URI || 'mongodb://localhost:27017/yelp-camp';
 
 async function main() {
     try {
-        await mongoose.connect(url, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        await mongoose.connect(url);
         console.log('Connected successfully to server');
     } catch (error) {
         console.error('Connection error:', error);

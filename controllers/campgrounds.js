@@ -3,8 +3,14 @@ const Campground = require('../models/campground');
 
 // we can assume views directory for default 
 module.exports.index = async (req, res) => {      //view/campgrounds/index.ejs
-    const campgrounds = await Campground.find({});
-    res.render('campgrounds/index', { campgrounds })
+    try {
+        const campgrounds = await Campground.find({});
+        res.render('campgrounds/index', { campgrounds })
+    } catch (err) {
+        console.error('Error fetching campgrounds:', err);
+        req.flash('error', 'Error loading campgrounds');
+        res.redirect('/');
+    }
 }
 
 module.exports.newform = (req, res) => {        
